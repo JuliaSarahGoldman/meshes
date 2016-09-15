@@ -50,16 +50,29 @@ App::App(const GApp::Settings& settings) : GApp(settings) {
 }
 
 
-void App::makeCylinder(float radius, float height){
-    TextOutput file("data-files/model/cylinder.off");
-    file.printf(STR(OFF\n
+//numEdges is currently a constant because it's not checked or used
+void App::makeCylinder(float radius, float height, int numVertices){
+    TextOutput file("../data-files/model/cylinder.off");
+    //should actually be 2 + num vertices
+    file.printf(STR(OFF\n%d %d 1\n), 2*numVertices, numVertices);
+        //loop to make vertices
+    for(int i = 0; i < numVertices; ++i){
+        file.printf(STR(%f %f %f\n), radius*(-sin(((2*pif()*i)/numVertices))), radius*height, radius*(cos((2*pif()*i)/numVertices)));
+    }
+    for(int i = 0; i < numVertices; ++i){
+        file.printf(STR(%f 0.0 %f\n), radius*(-sin(((2*pif()*i)/numVertices))), radius*(cos((2*pif()*i)/numVertices)));
+    }
+    //Loop for sides
+    for(int i = 0; i < numVertices; ++i){
+        file.printf(STR(4 %d %d %d %d\n), i, (i+1)%numVertices, (i+1)%numVertices + numVertices, i+numVertices);
+    }
 
-    ));
     file.commit();
 }
 
 //Should take image as parameter
 void App::generateHeightfield(){
+    return;
 }
 
 // Called before the application loop begins.  Load data here and
@@ -67,6 +80,7 @@ void App::generateHeightfield(){
 // automatically caught.
 void App::onInit() {
     GApp::onInit();
+    makeCylinder(1, 2, 10);
     setFrameDuration(1.0f / 120.0f);
 
     // Call setScene(shared_ptr<Scene>()) or setScene(MyScene::create()) to replace
