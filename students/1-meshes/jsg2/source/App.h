@@ -18,6 +18,8 @@ public:
     
     App(const GApp::Settings& settings = GApp::Settings());
 
+    void makeCylinder(float radius, float height);
+    void generateHeightfield();
     virtual void onInit() override;
     virtual void onAI() override;
     virtual void onNetwork() override;

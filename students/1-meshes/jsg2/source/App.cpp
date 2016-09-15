@@ -50,6 +50,18 @@ App::App(const GApp::Settings& settings) : GApp(settings) {
 }
 
 
+void App::makeCylinder(float radius, float height){
+    TextOutput file("data-files/model/cylinder.off");
+    file.printf(STR(OFF\n
+
+    ));
+    file.commit();
+}
+
+//Should take image as parameter
+void App::generateHeightfield(){
+}
+
 // Called before the application loop begins.  Load data here and
 // not in the constructor so that common exceptions will be
 // automatically caught.

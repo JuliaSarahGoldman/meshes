@@ -96,6 +96,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="data-files\test.Scene.Any" />
+    <None Include="data-files\whiteCube.Scene.Any" />
     <None Include="doc-files\report.md.html" />
     <None Include="Doxyfile" />
     <None Include="journal\journal.md.html" />
