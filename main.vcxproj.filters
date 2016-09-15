@@ -21,6 +21,9 @@
     </None>
     <None Include="journal\journal.md.html" />
     <None Include="doc-files\report.md.html" />
+    <None Include="data-files\whiteCube.Scene.Any">
+      <Filter>Scene Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">
