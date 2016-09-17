@@ -54,7 +54,7 @@ App::App(const GApp::Settings& settings) : GApp(settings) {
 void App::makeCylinder(float radius, float height, int numVertices){
     TextOutput file("../data-files/model/cylinder.off");
     //should actually be 2 + num vertices
-    file.printf(STR(OFF\n%d %d 1\n), 2*numVertices, numVertices);
+    file.printf(STR(OFF\n%d %d 1\n), 2*numVertices, numVertices+2);
         //loop to make vertices
     for(int i = 0; i < numVertices; ++i){
         file.printf(STR(%f %f %f\n), radius*(-sin(((2*pif()*i)/numVertices))), radius*height, radius*(cos((2*pif()*i)/numVertices)));
@@ -66,7 +66,18 @@ void App::makeCylinder(float radius, float height, int numVertices){
     for(int i = 0; i < numVertices; ++i){
         file.printf(STR(4 %d %d %d %d\n), i, (i+1)%numVertices, (i+1)%numVertices + numVertices, i+numVertices);
     }
-
+    //Loop for top
+    file.printf(STR(%d ), numVertices);
+    for(int i = 0; i < numVertices; ++i){
+        file.printf(" %d", i);
+    }
+    file.printf(STR(\n));
+    //Loop for bottom
+    file.printf(STR(%d), numVertices);
+    for(int i = numVertices; i < 2*numVertices; ++i){
+        file.printf(" %d", i);
+    }
+    file.printf(STR(\n));
     file.commit();
 }
 
