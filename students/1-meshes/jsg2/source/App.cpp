@@ -81,9 +81,28 @@ void App::makeCylinder(float radius, float height, int numVertices){
     file.commit();
 }
 
-//Should take image as parameter
-void App::generateHeightfield(){
-    return;
+void App::generateGlass(int slices, int numRings){
+    float topRadius = 4;
+    float bottomRadius = 1;
+    float radius = bottomRadius;
+    float rIncrement = (topRadius-bottomRadius)/(numRings-1);
+    float height = .5;
+    float hIncrement = .5;
+    TextOutput file("../data-files/model/glass.off");
+    file.printf(STR(OFF\n%d %d 1\n), numRings*slices, (numRings-1)*slices);
+    for (int i = 0; i < numRings; ++i){
+        for(int j = 0; j < slices; ++j){
+            file.printf(STR(%f %f %f\n), radius*(-sin(((2*pif()*j)/slices))), radius*height, radius*(cos((2*pif()*j)/slices)));
+        }
+        radius +=rIncrement;
+        height += hIncrement;
+    }
+    for (int i = 0; i <numRings-1; ++i){
+        for(int j = i; j < i+slices; ++j){
+            file.printf(STR(4 %d %d %d %d\n), j, (j+1)%slices, (j+1)%slices + slices, j+slices);
+        }
+    }
+    file.commit();
 }
 
 // Called before the application loop begins.  Load data here and
@@ -92,6 +111,7 @@ void App::generateHeightfield(){
 void App::onInit() {
     GApp::onInit();
     makeCylinder(1, 2, 10);
+    generateGlass(4, 2);
     setFrameDuration(1.0f / 120.0f);
 
     // Call setScene(shared_ptr<Scene>()) or setScene(MyScene::create()) to replace
@@ -118,6 +138,48 @@ void App::makeGUI() {
 
     debugWindow->setVisible(true);
     developerWindow->videoRecordDialog->setEnabled(true);
+    GuiPane* heightfieldPane = debugPane->addPane("Heightfield");
+ 
+    heightfieldPane->setNewChildSize(240);
+    heightfieldPane->addNumberBox("Max Y", &m_heightfieldYScale, "m", GuiTheme::LOG_SLIDER, 0.0f, 100.0f)->setUnitsSize(30);
+    heightfieldPane->addNumberBox("XZ Scale", &m_heightfieldXZScale, "m", GuiTheme::LOG_SLIDER, 0.001f, 10.0f)->setUnitsSize(30);
+
+    heightfieldPane->beginRow(); {
+        heightfieldPane->addTextBox("Input Image", &m_heightfieldSource)->setWidth(210);
+        heightfieldPane->addButton("...", [this](){
+            FileDialog::getFilename(m_heightfieldSource, "png", false);
+        })->setWidth(30);
+    } heightfieldPane->endRow();
+
+    heightfieldPane->addButton("Generate", [this](){
+        shared_ptr<Image> image;
+        try{
+            image = Image::fromFile(m_heightfieldSource);
+            TextOutput file("../data-files/model/heightfield.off");
+            file.printf(STR(OFF\n%d %d 1\n), image->width()*image->height(), (image->width()-1)*(image->height()-1));
+            Color3 color = Color3();
+            for (int i = 0; i < image->width(); ++i){
+                for (int j = 0; j< image->height(); ++j){
+                    const Point2int32 point = Point2int32(i,j);
+                    image->get(point, color);
+                    float grayValue = color.average();
+                    file.printf("%f %f %f\n", i*m_heightfieldXZScale, grayValue*m_heightfieldYScale, j*m_heightfieldXZScale);
+                }
+            }
+
+            for (int j = 0; j < (image->width()*(image->height()-1))-1; ++j){
+                if ((j+1)%image->width() != 0){
+                    file.printf("4 %d %d %d %d\n", j, j+1, j+image->width()+1, j+image->width());
+                }
+            }
+
+            file.commit();
+        }catch(...){
+            msgBox("Unable to load the image.", m_heightfieldSource);
+        }
+    });
+
+
 
     GuiPane* infoPane = debugPane->addPane("Info", GuiTheme::ORNATE_PANE_STYLE);
     
