@@ -10,7 +10,9 @@
 /** \brief Application framework. */
 class App : public GApp {
 protected:
-
+    float m_heightfieldYScale;
+    float m_heightfieldXZScale;
+    String m_heightfieldSource;
     /** Called from onInit */
     void makeGUI();
 
@@ -19,7 +21,7 @@ public:
     App(const GApp::Settings& settings = GApp::Settings());
 
     void makeCylinder(float radius, float height, int numVertices);
-    void generateHeightfield();
+    void generateGlass(int slices, int numRings);
     virtual void onInit() override;
     virtual void onAI() override;
     virtual void onNetwork() override;

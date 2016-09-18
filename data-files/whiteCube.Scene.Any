@@ -4,7 +4,7 @@
 
     models = {
         cubeModel = ArticulatedModel::Specification {
-            filename = "model/cylinder.off";
+            filename = "model/glass.off";
             preprocess = {
                 setMaterial(all(), Color3(0, 1, 1));
             };
@@ -17,7 +17,7 @@
             texture = "cubemap/whiteroom/whiteroom-*.png"; 
         };
         
-        sun = Light { 
+       /* sun = Light { 
             attenuation = (0, 0, 1); 
             bulbPower = Power3(4e+006); 
             frame = CFrame::fromXYZYPRDegrees(-15, 207, -41, -164, -77, 77);
@@ -25,11 +25,11 @@
             spotHalfAngleDegrees = 5; 
             spotSquare = true; 
             type = "SPOT"; 
-        }; 
+        }; */
 
         cube0 = VisibleEntity {
             model = "cubeModel";
-            frame = CFrame::fromXYZYPRDegrees(0, 0, 0, 0, 0, 0);
+            frame = CFrame::fromXYZYPRDegrees(0, 0, .5, 0, 0, 0);
 
         };
 
