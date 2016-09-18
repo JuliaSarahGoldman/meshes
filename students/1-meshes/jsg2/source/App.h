@@ -22,6 +22,7 @@ public:
 
     void makeCylinder(float radius, float height, int numVertices);
     void generateGlass(int slices, int numRings);
+    void makeGlass(int slices);
     virtual void onInit() override;
     virtual void onAI() override;
     virtual void onNetwork() override;
