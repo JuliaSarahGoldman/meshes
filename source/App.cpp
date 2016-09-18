@@ -81,6 +81,38 @@ void App::makeCylinder(float radius, float height, int numVertices){
     file.commit();
 }
 
+void App::makeGlass(int slices){
+    Array<float> radii(0.0, 1.0, 0.25, .25, 0.5, 0.7);
+    radii.append(1.0);
+    radii.append(1.5);
+    radii.append(2.0);
+    radii.append(1.4);
+    radii.append(.5);
+    radii.append(0.0);
+    Array<float> heights(-1.1, -1.1, -1, .6, 0.8, 1.0);
+    heights.append(1.3);
+    heights.append(2.0);
+    heights.append(3.1);
+    heights.append(2.0);
+    heights.append(1.7);
+    heights.append(1.4);
+    TextOutput file("../data-files/model/glass.off");
+    //file.printf("**********************\n");
+    file.printf(STR(OFF\n%d %d 1\n), heights.size()*slices, (heights.size()-1)*slices);
+     for (int i = 0; i < heights.size(); ++i){
+        for(int j = 0; j < slices; ++j){
+            file.printf(STR(%f %f %f\n), radii[i]*(-sin(((2*pif()*j)/slices))), heights[i], radii[i]*(cos((2*pif()*j)/slices)));
+        }
+    }
+    for (int i = 0; i < heights.size()-1; ++i){
+        for(int j = 0; j < slices; ++j){
+            //file.printf(STR(4 %d %d %d %d\n), i*slices + j, i*slices + (j+1)%slices, i*slices +slices + (j+1)%slices, i*slices +slices + j);
+            file.printf(STR(4 %d %d %d %d\n), i*slices +slices + j, i*slices +slices + (j+1)%slices, i*slices + (j+1)%slices, i*slices + j );
+        }
+    }
+    file.commit();
+}
+
 void App::generateGlass(int slices, int numRings){
     float topRadius = 4;
     float bottomRadius = 1;
@@ -89,7 +121,7 @@ void App::generateGlass(int slices, int numRings){
     float height = .5;
     float hIncrement = .5;
     TextOutput file("../data-files/model/glass.off");
-    file.printf(STR(OFF\n%d %d 1\n), numRings*slices, (numRings-1)*slices);
+    file.printf(STR(OFF\n%d %d 1\n), numRings*slices + (numRings-2)*slices, (numRings-1)*slices + (numRings-3)*slices + slices);
     for (int i = 0; i < numRings; ++i){
         for(int j = 0; j < slices; ++j){
             file.printf(STR(%f %f %f\n), radius*(-sin(((2*pif()*j)/slices))), radius*height, radius*(cos((2*pif()*j)/slices)));
@@ -97,11 +129,38 @@ void App::generateGlass(int slices, int numRings){
         radius +=rIncrement;
         height += hIncrement;
     }
+    
+    bottomRadius = .6*bottomRadius;
+    radius = bottomRadius;
+    rIncrement = (topRadius-bottomRadius)/(numRings-1);
+    height = .5 + hIncrement;
+    
+    for (int i = 0; i < numRings-2; ++i){
+        for(int j = 0; j < slices; ++j){
+            file.printf(STR(%f %f %f\n), radius*(-sin(((2*pif()*j)/slices))), radius*height, radius*(cos((2*pif()*j)/slices)));
+        }
+        radius +=rIncrement;
+        height += hIncrement;
+    }
+
     for (int i = 0; i <numRings-1; ++i){
-        for(int j = i; j < i+slices; ++j){
-            file.printf(STR(4 %d %d %d %d\n), j, (j+1)%slices, (j+1)%slices + slices, j+slices);
+        for(int j = 0; j < slices; ++j){
+            //file.printf(STR(4 %d %d %d %d\n), i*slices +j, i*slices+(j+1)%slices, i*slices+(j+1)%slices + slices, i*slices+j+slices);
+            file.printf(STR(4 %d %d %d %d\n), i*slices+j+slices, i*slices+(j+1)%slices + slices, i*slices+(j+1)%slices, i*slices +j);
         }
     }
+    //file.printf("********************\n");
+    for (int i = numRings; i < (numRings-1+(numRings-2)); ++i){
+        for(int j = 0; j < slices; ++j){
+            file.printf(STR(4 %d %d %d %d\n), i*slices +j, i*slices+(j+1)%slices, i*slices+(j+1)%slices + slices, i*slices+j+slices);
+        }
+    }
+    //file.printf("*************\n");
+    for(int i = 0; i < slices; ++i){
+        //file.printf(STR(4 %d %d %d %d\n), numRings*(slices-1) + i, numRings*(slices-1) + (i+1)%slices, numRings*slices + (numRings-3)*slices +(i+1)%slices, numRings*slices + (numRings-3)*slices +i);
+        file.printf(STR(4 %d %d %d %d\n), numRings*slices + (numRings-3)*slices +i, numRings*slices + (numRings-3)*slices +(i+1)%slices, numRings*(slices-1) + (i+1)%slices, numRings*(slices-1) + i);
+    }
+
     file.commit();
 }
 
@@ -111,7 +170,8 @@ void App::generateGlass(int slices, int numRings){
 void App::onInit() {
     GApp::onInit();
     makeCylinder(1, 2, 10);
-    generateGlass(4, 2);
+    //generateGlass(6, 4);
+    makeGlass(10);
     setFrameDuration(1.0f / 120.0f);
 
     // Call setScene(shared_ptr<Scene>()) or setScene(MyScene::create()) to replace
