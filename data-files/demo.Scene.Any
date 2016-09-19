@@ -1,0 +1,139 @@
+/* -*- c++ -*- */
+{ 
+    name = "Fountain"; 
+
+    models = {
+        baseModel = ArticulatedModel::Specification {
+            filename = "model/fountain.off";
+            preprocess = {
+                setMaterial(all(), "../stone_texture197.jpg");
+                //transformGeometry(all(), Matrix4::scale(2,2,2));
+            };
+        };
+
+        secondModel = ArticulatedModel::Specification {
+            filename = "model/fountain.off";
+            preprocess = {
+                setMaterial(all(), "../stone_texture197.jpg");
+            transformGeometry(all(), Matrix4::scale(.75,.75,.75));
+            };
+        };
+
+        thirdModel = ArticulatedModel::Specification {
+            filename = "model/fountain.off";
+            preprocess = {
+                setMaterial(all(), "../stone_texture197.jpg");
+                transformGeometry(all(), Matrix4::scale(.57,.57,.57));
+            };
+        };
+
+        fourthModel = ArticulatedModel::Specification {
+            filename = "model/fountain.off";
+            preprocess = {
+                setMaterial(all(), "../stone_texture197.jpg");
+                transformGeometry(all(), Matrix4::scale(.42,.42,.42));
+            };
+        };
+        waterModel = ArticulatedModel::Specification {
+            filename = "model/splash.off";
+            preprocess = {
+                setMaterial(all(), Color3(0, .5, 1));
+                transformGeometry(all(), Matrix4::scale(2,2,2));
+            };
+        };
+
+        treeModel = ArticulatedModel::Specification {
+            filename = "model/tree.off";
+            preprocess = {
+                setMaterial(all(), Color3(.2, 1, .3));
+                transformGeometry(all(), Matrix4::scale(1.5,1.5,1.5));
+            };
+        };
+
+        groundModel = ArticulatedModel::Specification {
+            filename = "model/cube.off";
+            preprocess = {
+                setMaterial(all(), Color3(.4, .7, .4));
+                transformGeometry(all(), Matrix4::scale(36,0,36));
+            };
+        }; 
+
+    };
+
+    entities = { 
+        
+        skybox = Skybox { 
+            texture = "cubemap/whiteroom/whiteroom-*.png"; 
+        };
+        
+       sun = Light { 
+            attenuation = (0, 0, 1); 
+            bulbPower = Power3(4e+004); 
+            frame = CFrame::fromXYZYPRDegrees(-15, 207, -41, -164, -77, 77);
+            shadowMapSize = Vector2int16(2048, 2048); 
+            spotHalfAngleDegrees = 5; 
+            spotSquare = true; 
+            type = "SPOT"; 
+        };
+
+        base = VisibleEntity {
+            model = "baseModel";
+            frame = CFrame::fromXYZYPRDegrees(0, 0, 0, 0, 0, 0);
+
+        };
+
+        tier1 = VisibleEntity {
+            model = "secondModel";
+            frame = CFrame::fromXYZYPRDegrees(0, 3.5, 0, 0, 0, 0);
+
+        };
+
+        tier2 = VisibleEntity {
+            model = "thirdModel";
+            frame = CFrame::fromXYZYPRDegrees(0, 6.12, 0, 0, 0, 0);
+
+        };
+
+        tier3 = VisibleEntity {
+            model = "fourthModel";
+            frame = CFrame::fromXYZYPRDegrees(0, 8.09, 0, 0, 0, 0);
+
+        };
+
+        splash = VisibleEntity {
+            model = "waterModel";
+            frame = CFrame::fromXYZYPRDegrees(0, 9.09, 0, 0, 0, 0);
+
+        };
+
+        tree1 = VisibleEntity {
+            model = "treeModel";
+            frame = CFrame::fromXYZYPRDegrees(12, 0, 12, 0, 0, 0);
+
+        };
+
+        tree2 = VisibleEntity {
+            model = "treeModel";
+            frame = CFrame::fromXYZYPRDegrees(-12, 0, 12, 0, 0, 0);
+        };
+
+        tree3 = VisibleEntity {
+            model = "treeModel";
+            frame = CFrame::fromXYZYPRDegrees(-12, 0, -12, 0, 0, 0);
+        };
+
+        tree4 = VisibleEntity {
+            model = "treeModel";
+            frame = CFrame::fromXYZYPRDegrees(12, 0, -12, 0, 0, 0);
+        };
+
+        ground = VisibleEntity {
+            model = "groundModel";
+            frame = CFrame::fromXYZYPRDegrees(0, 0, 0, 0, 0, 0);
+        };
+
+        camera = Camera {
+            frame = CFrame::fromXYZYPRDegrees(0, 0, 5);
+        };
+    };
+};
