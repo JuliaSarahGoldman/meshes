@@ -68,7 +68,7 @@ void App::makeCylinder(float radius, float height, int numVertices){
     }
     //Loop for top
     file.printf(STR(%d ), numVertices);
-    for(int i = 0; i < numVertices; ++i){
+    for(int i = numVertices-1; i >= 0; --i){
         file.printf(" %d", i);
     }
     file.printf(STR(\n));
@@ -80,6 +80,93 @@ void App::makeCylinder(float radius, float height, int numVertices){
     file.printf(STR(\n));
     file.commit();
 }
+
+
+void App::makeFountainPiece(){
+    int slices = 20;
+    Array<float> radii(0.0, 4.0, 4.25, 4, 3.5, 3.75);
+    radii.append(3.75);
+    radii.append(6.0);
+    radii.append(6.25);
+    radii.append(6.27);
+    radii.append(6.5);
+    radii.append(6.25);
+    radii.append(6.25);
+    radii.append(5.0);
+    radii.append(4.7);
+    radii.append(5.0);
+    radii.append(0.0);
+    
+    Array<float> heights(0.0, 0.0, 0.5, 1.0, 2.0, 2.5);
+    heights.append(3.0);
+    heights.append(3.0);
+    heights.append(4.0);
+    heights.append(4.5);
+    heights.append(5.0);
+    heights.append(5.5);
+    heights.append(4.5);
+    heights.append(4);
+    heights.append(3.5);
+    heights.append(3.25);
+    heights.append(3.25);
+    TextOutput file("../data-files/model/fountain.off");
+    //file.printf("**********************\n");
+    file.printf(STR(OFF\n%d %d 1\n), heights.size()*slices, (heights.size()-1)*slices);
+     for (int i = 0; i < heights.size(); ++i){
+        for(int j = 0; j < slices; ++j){
+            file.printf(STR(%f %f %f\n), radii[i]*(-sin(((2*pif()*j)/slices))), heights[i], radii[i]*(cos((2*pif()*j)/slices)));
+        }
+    }
+    for (int i = 0; i < heights.size()-1; ++i){
+        for(int j = 0; j < slices; ++j){
+            //file.printf(STR(4 %d %d %d %d\n), i*slices + j, i*slices + (j+1)%slices, i*slices +slices + (j+1)%slices, i*slices +slices + j);
+            file.printf(STR(4 %d %d %d %d\n), i*slices +slices + j, i*slices +slices + (j+1)%slices, i*slices + (j+1)%slices, i*slices + j );
+        }
+    }
+    file.commit();
+}
+
+void App::makeSplash(){
+    int slices = 20;
+    Array<float> radii(.5, .5, .6, .75, .63, .8);
+    radii.append(.95);
+    radii.append(1.0);
+    radii.append(1.5);
+    radii.append(1.8);
+    radii.append(2.0);
+    radii.append(2.2);
+    radii.append(2.0);
+    radii.append(1.75);
+    radii.append(0.0);
+    
+    Array<float> heights(0.0, 0.5, 0.75, 1.0, 1.25, 1.5);
+    heights.append(1.75);
+    heights.append(1.75);
+    heights.append(1.5);
+    heights.append(1.25);
+    heights.append(1.0);
+    heights.append(1.25);
+    heights.append(1.75);
+    heights.append(2.0);
+    heights.append(1.85);
+    TextOutput file("../data-files/model/splash.off");
+    //file.printf("**********************\n");
+    file.printf(STR(OFF\n%d %d 1\n), heights.size()*slices, (heights.size()-1)*slices);
+     for (int i = 0; i < heights.size(); ++i){
+        for(int j = 0; j < slices; ++j){
+            file.printf(STR(%f %f %f\n), radii[i]*(-sin(((2*pif()*j)/slices))), heights[i], radii[i]*(cos((2*pif()*j)/slices)));
+        }
+    }
+    for (int i = 0; i < heights.size()-1; ++i){
+        for(int j = 0; j < slices; ++j){
+            //file.printf(STR(4 %d %d %d %d\n), i*slices + j, i*slices + (j+1)%slices, i*slices +slices + (j+1)%slices, i*slices +slices + j);
+            file.printf(STR(4 %d %d %d %d\n), i*slices +slices + j, i*slices +slices + (j+1)%slices, i*slices + (j+1)%slices, i*slices + j );
+        }
+    }
+    file.commit();
+}
+
+
 
 void App::makeGlass(int slices){
     Array<float> radii(0.0, 1.0, 0.25, .25, 0.5, 0.7);
@@ -112,7 +199,7 @@ void App::makeGlass(int slices){
     }
     file.commit();
 }
-
+/*
 void App::generateGlass(int slices, int numRings){
     float topRadius = 4;
     float bottomRadius = 1;
@@ -163,6 +250,7 @@ void App::generateGlass(int slices, int numRings){
 
     file.commit();
 }
+*/
 
 // Called before the application loop begins.  Load data here and
 // not in the constructor so that common exceptions will be
@@ -172,6 +260,8 @@ void App::onInit() {
     makeCylinder(1, 2, 10);
     //generateGlass(6, 4);
     makeGlass(10);
+    makeFountainPiece();
+    makeSplash();
     setFrameDuration(1.0f / 120.0f);
 
     // Call setScene(shared_ptr<Scene>()) or setScene(MyScene::create()) to replace
@@ -198,11 +288,37 @@ void App::makeGUI() {
 
     debugWindow->setVisible(true);
     developerWindow->videoRecordDialog->setEnabled(true);
+
+    GuiPane* glassPane = debugPane->addPane("Chalice");
+    glassPane->setNewChildSize(240);
+    glassPane->addNumberBox("Slices", &m_slices,"m", GuiTheme::NO_SLIDER, 0, 100)->setUnitsSize(1);
+    glassPane->addButton("Generate", [this](){
+        drawMessage("Chalice is loading.");
+        makeGlass(m_slices);
+        ArticulatedModel::clearCache();
+        loadScene(developerWindow->sceneEditorWindow->selectedSceneName());
+
+    });
+
+
+    GuiPane* cylinderPane = debugPane->addPane("Cylinder");
+    cylinderPane->setNewChildSize(240);
+    cylinderPane->addNumberBox("Radius", &m_radius,"m", GuiTheme::NO_SLIDER, 0.0f, 100.0f)->setUnitsSize(.2);
+    cylinderPane->addNumberBox("Height", &m_height,"m", GuiTheme::NO_SLIDER, 0.0f, 100.0f)->setUnitsSize(1);
+    cylinderPane->addButton("Generate", [this](){
+        drawMessage("Cylinder is loading.");
+        makeCylinder(m_radius, m_height, 20);
+        ArticulatedModel::clearCache();
+        loadScene(developerWindow->sceneEditorWindow->selectedSceneName());
+
+    });
+    
     GuiPane* heightfieldPane = debugPane->addPane("Heightfield");
  
     heightfieldPane->setNewChildSize(240);
     heightfieldPane->addNumberBox("Max Y", &m_heightfieldYScale, "m", GuiTheme::LOG_SLIDER, 0.0f, 100.0f)->setUnitsSize(30);
     heightfieldPane->addNumberBox("XZ Scale", &m_heightfieldXZScale, "m", GuiTheme::LOG_SLIDER, 0.001f, 10.0f)->setUnitsSize(30);
+
 
     heightfieldPane->beginRow(); {
         heightfieldPane->addTextBox("Input Image", &m_heightfieldSource)->setWidth(210);
@@ -212,6 +328,7 @@ void App::makeGUI() {
     } heightfieldPane->endRow();
 
     heightfieldPane->addButton("Generate", [this](){
+        drawMessage("Heightfield is loading");
         shared_ptr<Image> image;
         try{
             image = Image::fromFile(m_heightfieldSource);
@@ -223,17 +340,26 @@ void App::makeGUI() {
                     const Point2int32 point = Point2int32(i,j);
                     image->get(point, color);
                     float grayValue = color.average();
-                    file.printf("%f %f %f\n", i*m_heightfieldXZScale, grayValue*m_heightfieldYScale, j*m_heightfieldXZScale);
+                    file.printf("%f %f %f\n", ((float)j)*m_heightfieldXZScale, grayValue*m_heightfieldYScale, ((float) i)*m_heightfieldXZScale);
                 }
             }
 
-            for (int j = 0; j < (image->width()*(image->height()-1))-1; ++j){
+            /*for (int j = 0; j < (image->width()*(image->height()-1)); ++j){
                 if ((j+1)%image->width() != 0){
-                    file.printf("4 %d %d %d %d\n", j, j+1, j+image->width()+1, j+image->width());
+                    //file.printf("4 %d %d %d %d\n", j, j+1, j+image->width()+1, j+image->width());
+                    file.printf("4 %d %d %d %d\n", j+image->width(), j+image->width()+1, j+1, j);
+                }
+            }*/
+            //file.printf("%d %d\n", image->height(), image->width());
+            for (int i = 0; i < image->width()-1; ++i){
+                for (int j = 0; j < image->height()-1; ++j){
+                    file.printf("4 %d %d %d %d\n", j + i*image->height(), j + (i+1)*image->height(), j+1 + (i+1)*image->height(), j+1 + i*image->height());
                 }
             }
-
             file.commit();
+
+            ArticulatedModel::clearCache();
+            loadScene(developerWindow->sceneEditorWindow->selectedSceneName());
         }catch(...){
             msgBox("Unable to load the image.", m_heightfieldSource);
         }
