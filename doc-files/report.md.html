@@ -3,29 +3,49 @@
 
 Algorithms
 ================================
-The main algorithm for this...
+This program need algorithms for two important purposes: generating points,
+and generating faces. When generating points in a circle, as long as one knows the number of points one wants and the radius one wants the points to appear at (and the height), one can simply use the equation (plug in equation). For a heightfield, on the other hand, one wants a field of points, one for each pixel. To do this, one can take the color value at each pixel, average the red, green, and blue values to get a single number, and us ethis (multiplied by a constant) for the height. The pixel's coordinates become the x,y coordinates (again, multiplied by a constant). 
+
+Then, one needs to connect the points. For the cylinder or the glass, one is connecting vertices arranged in circluar layers, or rings. One can choose a ring to start at, and a vertex in that ring, and connect that vertex to a vertex next to it and the two directly above (or below) it and its neighbor (in counterclockwise order). One does this for every vertex in the ring, and then moves on to the next ring, until every vertex is connected.
+
+For the heightfield, start in a corner, and connect that vertex to the vertices to its right, beneath it, and beneath it to the right in a counterclockwise order, and then do the same for each vertex in the row,
+and the same for every other row.
 
 Implementation Design
 ================================
-First, I...
+
+A cylinder or glass is essentially a series of rings, each of which has a radius and a height. Therefore, one needs to be able to take in an array of tuples (or in my case, actually two separate arrays of floats, which conceptually the same), containing an array and a height for each in ring in the order one wants them connected...
 
 Results
 ================================
-Images (store in the correct place)
+Cube:
+
+Cylinder:
+
+Heightfield
+
+Cup:
+
 
 My Demo
 ================================
-Picture
-Description
+Picture:
+
+For my scene, I created a fountain. A fountain is essentially a series of wide cups stacke don top of each other. Thus, I sketched a fountain base on paper and calculated the necessary radii and heights, and used my cup generating code to create an OFF file for that fountain base. Then, in my scene file I created models for tiers of the fountain of different sizes, and then stacked them. My water is also essentially a cup.
 
 Questions
 ================================
 1.
-2.
+2. Triangle meshes are preferred because of the special properties of triangles. A triangle is a simplex, meaning that any polygon can be tesselated into triangles, so anything that can be modeled with polygons can be modeled just as accuarately with triangles. Also, triangles are always planar and convex, which makes it easier to model their behavior.
 3.
 
 Reflections
 ================================
+I learned:
+
+-The topological relationship between cylinders and cups
+-The importance or the right-hand rule
+-
 
 Workflow
 ================================

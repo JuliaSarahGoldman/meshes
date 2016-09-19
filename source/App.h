@@ -12,6 +12,9 @@ class App : public GApp {
 protected:
     float m_heightfieldYScale;
     float m_heightfieldXZScale;
+    float m_radius;
+    float m_height;
+    int m_slices;
     String m_heightfieldSource;
     /** Called from onInit */
     void makeGUI();
@@ -22,6 +25,8 @@ public:
 
     void makeCylinder(float radius, float height, int numVertices);
     void generateGlass(int slices, int numRings);
+    void makeFountainPiece();
+    void makeSplash();
     void makeGlass(int slices);
     virtual void onInit() override;
     virtual void onAI() override;

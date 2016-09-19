@@ -1,10 +1,10 @@
 /* -*- c++ -*- */
 { 
-    name = "White Cube"; 
+    name = "Chalice"; 
 
     models = {
         cubeModel = ArticulatedModel::Specification {
-            filename = "model/cube.off";
+            filename = "model/glass.off";
             preprocess = {
                 setMaterial(all(), Color3(0, 1, 1));
             };
