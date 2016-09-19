@@ -14,7 +14,7 @@ and the same for every other row.
 Implementation Design
 ================================
 
-I manually created an OFF file for the cube in order to understand how OFF files work. Then, I created the cylinder with A cylinder or glass is essentially a series of rings, each of which has a radius and a height. Therefore, one needs to be able to take in an array of tuples (or in my case, actually two separate arrays of floats, which conceptually the same), containing an array and a height for each in ring in the order one wants them connected. 
+I manually created an OFF file for the cube in order to understand how OFF files work. Then, I created the cylinder with OFF file with a function, that created the vertices by iterating twice around a circle of a given radius at two different heights. Faces on the sides were created by iterating through teh vertices in counterclockwise order. The top and bottom were created by making an n-gone, depending on a specified number of slices, of the top vertices and the bottom vertices. A cylinder or glass is essentially a series of rings, each of which has a radius and a height. Therefore, one needs to be able to take in an array of tuples (or in my case, actually two separate arrays of floats, which conceptually the same), containing an array and a height for each in ring in the order one wants them connected. Thus, for my glass, and for the elements of my custom scene, I created a function that takes in such arrays. It creates the vertices for each ring in the manner of the cylinder, and iterates through the rings, connecting each ring with the vertices of the ring after it in the array.
 
 Results
 ================================
@@ -31,7 +31,7 @@ My Demo
 ================================
 Picture:
 
-For my scene, I created a fountain. A fountain is essentially a series of wide cups stacke don top of each other. Thus, I sketched a fountain base on paper and calculated the necessary radii and heights, and used my cup generating code to create an OFF file for that fountain base. Then, in my scene file I created models for tiers of the fountain of different sizes, and then stacked them. My water is also essentially a cup.
+For my scene, I created a fountain. A fountain is essentially a series of wide cups stacked on top of each other. Thus, I sketched a fountain base on paper and calculated the necessary radii and heights, and used my tube generating code to create an OFF file for that fountain base. Then, in my scene file I created models for tiers of the fountain of different sizes, and then stacked them. My water is also essentially a cup, as are the trees, while the ground is a squashed cube.
 
 Questions
 ================================
@@ -45,6 +45,8 @@ I learned:
 
 -The topological relationship between cylinders and cups
 -The importance or the right-hand rule
+-Having variables (rather than hard coded numbers) from the beginning eases in generalizing solutions.
+-Sometimes, a technique that seems to work can only go so far.
 -
 
 Workflow
