@@ -97,7 +97,7 @@
   <ItemGroup>
     <None Include="data-files\cup.Scene.Any" />
     <None Include="data-files\cylinder.Scene.Any" />
-    <None Include="data-files\fountain.Scene.Any" />
+    <None Include="data-files\demo.Scene.Any" />
     <None Include="data-files\heightfield.Scene.Any" />
     <None Include="data-files\test.Scene.Any" />
     <None Include="data-files\whiteCube.Scene.Any" />

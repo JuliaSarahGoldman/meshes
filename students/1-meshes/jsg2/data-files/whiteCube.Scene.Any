@@ -6,7 +6,7 @@
         cubeModel = ArticulatedModel::Specification {
             filename = "model/cube.off";
             preprocess = {
-                setMaterial(all(), Color3(0, 1, 1));
+                setMaterial(all(), Color3(1, 1, 1));
             };
         };
     };
@@ -29,7 +29,7 @@
 
         cube0 = VisibleEntity {
             model = "cubeModel";
-            frame = CFrame::fromXYZYPRDegrees(0, 0, .5, 0, 0, 0);
+            //frame = CFrame::fromXYZYPRDegrees(0, 0, 0, 0, 0, 0);
 
         };
 

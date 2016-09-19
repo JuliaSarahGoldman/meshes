@@ -81,6 +81,22 @@ void App::makeCylinder(float radius, float height, int numVertices){
     file.commit();
 }
 
+String App::makeTube(Array<float>& radii, Array<float>& heights, int slices){
+     String tube = String("OFF\n");
+     tube += format("%d %d 1\n", heights.size()*slices, (heights.size()-1)*slices);
+     for (int i = 0; i < heights.size(); ++i){
+        for(int j = 0; j < slices; ++j){
+            tube += format(STR(%f %f %f\n), radii[i]*(-sin(((2*pif()*j)/slices))), heights[i], radii[i]*(cos((2*pif()*j)/slices)));
+        }
+    }
+    for (int i = 0; i < heights.size()-1; ++i){
+        for(int j = 0; j < slices; ++j){
+            //file.printf(STR(4 %d %d %d %d\n), i*slices + j, i*slices + (j+1)%slices, i*slices +slices + (j+1)%slices, i*slices +slices + j);
+            tube+= format(STR(4 %d %d %d %d\n), i*slices +slices + j, i*slices +slices + (j+1)%slices, i*slices + (j+1)%slices, i*slices + j );
+        }
+    }
+    return tube;
+}
 
 void App::makeFountainPiece(){
     int slices = 20;
@@ -110,8 +126,9 @@ void App::makeFountainPiece(){
     heights.append(3.25);
     heights.append(3.25);
     TextOutput file("../data-files/model/fountain.off");
-    //file.printf("**********************\n");
-    file.printf(STR(OFF\n%d %d 1\n), heights.size()*slices, (heights.size()-1)*slices);
+    String tube = makeTube(radii, heights, slices);
+    file.writeSymbol(tube);
+    /*file.printf(STR(OFF\n%d %d 1\n), heights.size()*slices, (heights.size()-1)*slices);
      for (int i = 0; i < heights.size(); ++i){
         for(int j = 0; j < slices; ++j){
             file.printf(STR(%f %f %f\n), radii[i]*(-sin(((2*pif()*j)/slices))), heights[i], radii[i]*(cos((2*pif()*j)/slices)));
@@ -122,9 +139,47 @@ void App::makeFountainPiece(){
             //file.printf(STR(4 %d %d %d %d\n), i*slices + j, i*slices + (j+1)%slices, i*slices +slices + (j+1)%slices, i*slices +slices + j);
             file.printf(STR(4 %d %d %d %d\n), i*slices +slices + j, i*slices +slices + (j+1)%slices, i*slices + (j+1)%slices, i*slices + j );
         }
-    }
+    }*/
     file.commit();
 }
+
+
+void App::makeTree(){
+    int slices = 20;
+    Array<float> radii(0.0, 3.5, 3.2, 3.0, 2.9, 2.7);
+    radii.append(2.9);
+    radii.append(2.5);
+    //radii.append(2.7);
+    radii.append(2.0);
+    radii.append(2.6);
+    radii.append(2.5);
+    radii.append(2.4);
+    radii.append(1.7);
+    radii.append(1.9);
+    radii.append(1.7);
+    radii.append(1.4);
+    radii.append(1.2);
+    radii.append(0.0);
+    
+    Array<float> heights(0.0, 0.0, 1.0, 1.5, 2.0, 2.5);
+    heights.append(3.0);
+    heights.append(4.0);
+    //heights.append(4.0);
+    heights.append(4.5);
+    heights.append(5.0);
+    heights.append(6.0);
+    heights.append(7.0);
+    heights.append(8.0);
+    heights.append(9.0);
+    heights.append(9.5);
+    heights.append(10.0);
+    heights.append(11.0);
+    heights.append(12.0);
+    TextOutput file("../data-files/model/tree.off");
+    file.writeSymbol(makeTube(radii, heights, slices));
+    file.commit();
+}
+
 
 void App::makeSplash(){
     int slices = 20;
@@ -150,8 +205,9 @@ void App::makeSplash(){
     heights.append(2.0);
     heights.append(1.85);
     TextOutput file("../data-files/model/splash.off");
+    file.writeSymbol(makeTube(radii, heights, slices));
     //file.printf("**********************\n");
-    file.printf(STR(OFF\n%d %d 1\n), heights.size()*slices, (heights.size()-1)*slices);
+    /*file.printf(STR(OFF\n%d %d 1\n), heights.size()*slices, (heights.size()-1)*slices);
      for (int i = 0; i < heights.size(); ++i){
         for(int j = 0; j < slices; ++j){
             file.printf(STR(%f %f %f\n), radii[i]*(-sin(((2*pif()*j)/slices))), heights[i], radii[i]*(cos((2*pif()*j)/slices)));
@@ -162,7 +218,7 @@ void App::makeSplash(){
             //file.printf(STR(4 %d %d %d %d\n), i*slices + j, i*slices + (j+1)%slices, i*slices +slices + (j+1)%slices, i*slices +slices + j);
             file.printf(STR(4 %d %d %d %d\n), i*slices +slices + j, i*slices +slices + (j+1)%slices, i*slices + (j+1)%slices, i*slices + j );
         }
-    }
+    }*/
     file.commit();
 }
 
@@ -184,8 +240,9 @@ void App::makeGlass(int slices){
     heights.append(1.7);
     heights.append(1.4);
     TextOutput file("../data-files/model/glass.off");
+    file.writeSymbol(makeTube(radii, heights, slices));
     //file.printf("**********************\n");
-    file.printf(STR(OFF\n%d %d 1\n), heights.size()*slices, (heights.size()-1)*slices);
+    /*file.printf(STR(OFF\n%d %d 1\n), heights.size()*slices, (heights.size()-1)*slices);
      for (int i = 0; i < heights.size(); ++i){
         for(int j = 0; j < slices; ++j){
             file.printf(STR(%f %f %f\n), radii[i]*(-sin(((2*pif()*j)/slices))), heights[i], radii[i]*(cos((2*pif()*j)/slices)));
@@ -196,7 +253,7 @@ void App::makeGlass(int slices){
             //file.printf(STR(4 %d %d %d %d\n), i*slices + j, i*slices + (j+1)%slices, i*slices +slices + (j+1)%slices, i*slices +slices + j);
             file.printf(STR(4 %d %d %d %d\n), i*slices +slices + j, i*slices +slices + (j+1)%slices, i*slices + (j+1)%slices, i*slices + j );
         }
-    }
+    }*/
     file.commit();
 }
 /*
@@ -247,7 +304,7 @@ void App::generateGlass(int slices, int numRings){
         //file.printf(STR(4 %d %d %d %d\n), numRings*(slices-1) + i, numRings*(slices-1) + (i+1)%slices, numRings*slices + (numRings-3)*slices +(i+1)%slices, numRings*slices + (numRings-3)*slices +i);
         file.printf(STR(4 %d %d %d %d\n), numRings*slices + (numRings-3)*slices +i, numRings*slices + (numRings-3)*slices +(i+1)%slices, numRings*(slices-1) + (i+1)%slices, numRings*(slices-1) + i);
     }
-
+    
     file.commit();
 }
 */
@@ -262,6 +319,7 @@ void App::onInit() {
     makeGlass(10);
     makeFountainPiece();
     makeSplash();
+    makeTree();
     setFrameDuration(1.0f / 120.0f);
 
     // Call setScene(shared_ptr<Scene>()) or setScene(MyScene::create()) to replace

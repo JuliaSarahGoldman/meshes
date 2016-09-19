@@ -33,7 +33,7 @@
     <None Include="data-files\heightfield.Scene.Any">
       <Filter>Scene Files</Filter>
     </None>
-    <None Include="data-files\fountain.Scene.Any">
+    <None Include="data-files\demo.Scene.Any">
       <Filter>Scene Files</Filter>
     </None>
   </ItemGroup>

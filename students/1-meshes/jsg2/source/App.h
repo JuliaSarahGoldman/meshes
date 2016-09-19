@@ -24,10 +24,11 @@ public:
     App(const GApp::Settings& settings = GApp::Settings());
 
     void makeCylinder(float radius, float height, int numVertices);
-    void generateGlass(int slices, int numRings);
     void makeFountainPiece();
     void makeSplash();
+    void makeTree();
     void makeGlass(int slices);
+    String makeTube(Array<float>& radii, Array<float>& heights, int slices);
     virtual void onInit() override;
     virtual void onAI() override;
     virtual void onNetwork() override;
