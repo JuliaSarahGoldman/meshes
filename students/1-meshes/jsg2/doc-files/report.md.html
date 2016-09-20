@@ -8,13 +8,43 @@ and generating faces. When generating points in a circle, as long as one knows t
 
 Then, one needs to connect the points. For the cylinder or the glass, one is connecting vertices arranged in circluar layers, or rings. One can choose a ring to start at, and a vertex in that ring, and connect that vertex to a vertex next to it and the two directly above (or below) it and its neighbor (in counterclockwise order). One does this for every vertex in the ring, and then moves on to the next ring, until every vertex is connected.
 
+i iterates in the number of rings, j in the number of "slices" (sides per ring)
+
+************************************************************
+* Upper Ring                                               *
+*   i*slices + j              (i+1)*slices + j             *
+*   +------------------------+                             *
+*   |                        |                             *
+*   |                        |                             *
+*   +------------------------+                             *
+*   i*slices + (j+1)%slices   (i+1)*slices + (j+1)%slices  *
+* Lower Ring                                               *
+*                                                          *
+************************************************************
+
 For the heightfield, start in a corner, and connect that vertex to the vertices to its right, beneath it, and beneath it to the right in a counterclockwise order, and then do the same for each vertex in the row,
 and the same for every other row.
+
+i iterates in the width of the image, j in the hieght
+
+************************************************************
+* Top Row                                                  *
+*   j + i*height              j + (i+1)*height             *
+*   +------------------------+                             *
+*   |                        |                             *
+*   |                        |                             *
+*   +------------------------+                             *
+*   j+1 + i*height           j+1 + (i+1)*height            *
+* Bottom Row                                               *
+*                                                          *
+************************************************************
+
+The only real difference is that one does not mod, because rows of a heightfield do not form rings.
 
 Implementation Design
 ================================
 
-I manually created an OFF file for the cube in order to understand how OFF files work. Then, I created the cylinder with OFF file with a function, that created the vertices by iterating twice around a circle of a given radius at two different heights. Faces on the sides were created by iterating through teh vertices in counterclockwise order. The top and bottom were created by making an n-gone, depending on a specified number of slices, of the top vertices and the bottom vertices. A cylinder or glass is essentially a series of rings, each of which has a radius and a height. Therefore, one needs to be able to take in an array of tuples (or in my case, actually two separate arrays of floats, which conceptually the same), containing an array and a height for each in ring in the order one wants them connected. Thus, for my glass, and for the elements of my custom scene, I created a function that takes in such arrays. It creates the vertices for each ring in the manner of the cylinder, and iterates through the rings, connecting each ring with the vertices of the ring after it in the array.
+I manually created an OFF file for the cube in order to understand how OFF files work. Then, I created the cylinder with OFF file with a function [makeCylinder](class_app.html#a39b68f1117a31c5080e657e80e2512e6), that created the vertices by iterating twice around a circle of a given radius at two different heights. Faces on the sides were created by iterating through teh vertices in counterclockwise order. The top and bottom were created by making an n-gone, depending on a specified number of slices, of the top vertices and the bottom vertices. A cylinder or glass is essentially a series of rings, each of which has a radius and a height. Therefore, one needs to be able to take in an array of tuples (or in my case, actually two separate arrays of floats, which conceptually the same), containing an array and a height for each in ring in the order one wants them connected. Thus, for my [glass](class_app.html#a6728f0c588c36908b17a4a3bc2a4bdab), and for the elements of my custom scene, the (fountain pieces)[class_app.html#a8c408acbfdd90f6d30eb24c67746c5c5], trees[class_app.html#af85ee281da327b25bccd33a8bbe43833], and water[class_app.html#a49607f7a36691096f4af3ebe6b4ef16e], I created a [function](class_app.html#ade5f8544431c3bfc62b693533967b1fc) that takes in such arrays. It creates the vertices for each ring in the manner of the cylinder, and iterates through the rings, connecting each ring with the vertices of the ring after it in the array. I manually chose the points for these arrays.
 
 Results
 ================================
@@ -35,19 +65,28 @@ For my scene, I created a fountain. A fountain is essentially a series of wide c
 
 Questions
 ================================
-1. One can use the concept of a virtual image to fake reflections of the mountains. That is, when one actually looks into a reflective surface, objects appear to be ateh same distance from the surface in the reflection as they are from the surface in real life. As such, one can place a copy of the object behind the "reflective" surface at an equal distance behind the surface as thr actual object is in front of it , and the eye will be tricked.
+1. One can use the concept of a virtual image to fake reflections of the mountains. That is, when one actually looks into a reflective surface, objects appear to be a the same distance from the surface in the reflection as they are from the surface in real life. As such, one can place a mirrored copy of the object behind the "reflective" surface at an equal distance behind the surface as thr actual object is in front of it , and the eye will be tricked.
 2. Triangle meshes are preferred because of the special properties of triangles. A triangle is a simplex, meaning that any polygon can be tesselated into triangles, so anything that can be modeled with polygons can be modeled just as accuarately with triangles. Also, triangles are always planar and convex, which makes it easier to model their behavior.
-3. A more efficient tesselation would use fewer triangles in flat areas, and more triangles in hilly ones. One way to do this is greedy insertion algorithm, which first uses a triangulation with few triangles and a lot of error, and then refines the mesh by finding the spots with most error and inserting more vertices, until the mesh is as refined as one wants to be.
+3. A more efficient tesselation would use fewer triangles in flat areas, and more triangles in hilly ones. One way to do this is greedy insertion algorithm, which first uses a triangulation with few triangles and a lot of error, and then refines the mesh by finding the spots with most error and inserting more vertices, until the mesh is as refined as one wants to be. Source: https://www.cs.cmu.edu/~./garland/scape/scape.pdf
 
 Reflections
 ================================
-I learned:
 
--The topological relationship between cylinders and cups
--The importance or the right-hand rule
--Having variables (rather than hard coded numbers) from the beginning eases in generalizing solutions.
--Sometimes, a technique that seems to work can only go so far.
--
+-Cylinders, cubes, cups, and trees are all topologically spheres.
+
+-Surfaces can be approximated using triangles (although in some, but not all, cases, quadrilaterals will do.)
+
+-Obediance to the right hand rule is important.
+
+-Having variables (rather than hard coded numbers) from the beginning eases the process of generalizing solutions.
+
+-Sometimes, a technique that works in a specific case cannot be generalized.
+
+-It is important to carefully check all simple math right when one does it to avoid mysterious problems later.
+
+-It is best to test one's work on a wide variety of inputs.
+
+
 
 Workflow
 ================================
