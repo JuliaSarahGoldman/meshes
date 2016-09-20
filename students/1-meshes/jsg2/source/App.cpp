@@ -96,7 +96,7 @@ String App::makeTube(Array<float>& radii, Array<float>& heights, int slices){
 }
 
 void App::makeFountainPiece(){
-    int slices = 20;
+    int slices = 40;
     Array<float> radii(0.0, 4.0, 4.25, 4, 3.5, 3.75);
     radii.append(3.75);
     radii.append(6.0);
@@ -130,7 +130,7 @@ void App::makeFountainPiece(){
 
 
 void App::makeTree(){
-    int slices = 20;
+    int slices = 40;
     Array<float> radii(0.0, 3.5, 3.2, 3.0, 2.9, 2.7);
     radii.append(2.9);
     radii.append(2.5);
@@ -165,7 +165,7 @@ void App::makeTree(){
 
 
 void App::makeSplash(){
-    int slices = 20;
+    int slices = 40;
     Array<float> radii(.5, .5, .6, .75, .63, .8);
     radii.append(.95);
     radii.append(1.0);
@@ -270,7 +270,7 @@ void App::makeGUI() {
     cylinderPane->addNumberBox("Height", &m_height,"m", GuiTheme::NO_SLIDER, 0.0f, 100.0f)->setUnitsSize(1);
     cylinderPane->addButton("Generate", [this](){
         drawMessage("Cylinder is loading.");
-        makeCylinder(m_radius, m_height, 20);
+        makeCylinder(m_radius, m_height, 40);
         ArticulatedModel::clearCache();
         loadScene(developerWindow->sceneEditorWindow->selectedSceneName());
 
