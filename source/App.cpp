@@ -251,7 +251,7 @@ void App::makeGUI() {
     debugWindow->setVisible(true);
     developerWindow->videoRecordDialog->setEnabled(true);
 
-    /*Begin commenting out to remove pane here*/
+    /*Begin commenting out to remove pane here
     GuiPane* glassPane = debugPane->addPane("Chalice");
     glassPane->setNewChildSize(240);
     glassPane->addNumberBox("Slices", &m_slices,"m", GuiTheme::NO_SLIDER, 0, 100)->setUnitsSize(1);
@@ -331,7 +331,7 @@ void App::makeGUI() {
     infoPane->addButton("Exit", [this]() { m_endProgram = true; });
     infoPane->pack();
 
-    /*End commenting to remove pane here*/
+    End commenting to remove pane here*/
 
     // More examples of debugging GUI controls:
     // debugPane->addCheckBox("Use explicit checking", &explicitCheck);
