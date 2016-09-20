@@ -13,9 +13,9 @@
 
     entities = { 
         
-        skybox = Skybox { 
+        /*skybox = Skybox { 
             texture = "cubemap/whiteroom/whiteroom-*.png"; 
-        };
+        };*/
         
        /* sun = Light { 
             attenuation = (0, 0, 1); 

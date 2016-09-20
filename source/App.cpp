@@ -50,10 +50,8 @@ App::App(const GApp::Settings& settings) : GApp(settings) {
 }
 
 
-//numEdges is currently a constant because it's not checked or used
 void App::makeCylinder(float radius, float height, int numVertices){
     TextOutput file("../data-files/model/cylinder.off");
-    //should actually be 2 + num vertices
     file.printf(STR(OFF\n%d %d 1\n), 2*numVertices, numVertices+2);
         //loop to make vertices
     for(int i = 0; i < numVertices; ++i){
@@ -91,7 +89,6 @@ String App::makeTube(Array<float>& radii, Array<float>& heights, int slices){
     }
     for (int i = 0; i < heights.size()-1; ++i){
         for(int j = 0; j < slices; ++j){
-            //file.printf(STR(4 %d %d %d %d\n), i*slices + j, i*slices + (j+1)%slices, i*slices +slices + (j+1)%slices, i*slices +slices + j);
             tube+= format(STR(4 %d %d %d %d\n), i*slices +slices + j, i*slices +slices + (j+1)%slices, i*slices + (j+1)%slices, i*slices + j );
         }
     }
@@ -128,18 +125,6 @@ void App::makeFountainPiece(){
     TextOutput file("../data-files/model/fountain.off");
     String tube = makeTube(radii, heights, slices);
     file.writeSymbol(tube);
-    /*file.printf(STR(OFF\n%d %d 1\n), heights.size()*slices, (heights.size()-1)*slices);
-     for (int i = 0; i < heights.size(); ++i){
-        for(int j = 0; j < slices; ++j){
-            file.printf(STR(%f %f %f\n), radii[i]*(-sin(((2*pif()*j)/slices))), heights[i], radii[i]*(cos((2*pif()*j)/slices)));
-        }
-    }
-    for (int i = 0; i < heights.size()-1; ++i){
-        for(int j = 0; j < slices; ++j){
-            //file.printf(STR(4 %d %d %d %d\n), i*slices + j, i*slices + (j+1)%slices, i*slices +slices + (j+1)%slices, i*slices +slices + j);
-            file.printf(STR(4 %d %d %d %d\n), i*slices +slices + j, i*slices +slices + (j+1)%slices, i*slices + (j+1)%slices, i*slices + j );
-        }
-    }*/
     file.commit();
 }
 
@@ -149,7 +134,6 @@ void App::makeTree(){
     Array<float> radii(0.0, 3.5, 3.2, 3.0, 2.9, 2.7);
     radii.append(2.9);
     radii.append(2.5);
-    //radii.append(2.7);
     radii.append(2.0);
     radii.append(2.6);
     radii.append(2.5);
@@ -164,7 +148,6 @@ void App::makeTree(){
     Array<float> heights(0.0, 0.0, 1.0, 1.5, 2.0, 2.5);
     heights.append(3.0);
     heights.append(4.0);
-    //heights.append(4.0);
     heights.append(4.5);
     heights.append(5.0);
     heights.append(6.0);
@@ -206,19 +189,6 @@ void App::makeSplash(){
     heights.append(1.85);
     TextOutput file("../data-files/model/splash.off");
     file.writeSymbol(makeTube(radii, heights, slices));
-    //file.printf("**********************\n");
-    /*file.printf(STR(OFF\n%d %d 1\n), heights.size()*slices, (heights.size()-1)*slices);
-     for (int i = 0; i < heights.size(); ++i){
-        for(int j = 0; j < slices; ++j){
-            file.printf(STR(%f %f %f\n), radii[i]*(-sin(((2*pif()*j)/slices))), heights[i], radii[i]*(cos((2*pif()*j)/slices)));
-        }
-    }
-    for (int i = 0; i < heights.size()-1; ++i){
-        for(int j = 0; j < slices; ++j){
-            //file.printf(STR(4 %d %d %d %d\n), i*slices + j, i*slices + (j+1)%slices, i*slices +slices + (j+1)%slices, i*slices +slices + j);
-            file.printf(STR(4 %d %d %d %d\n), i*slices +slices + j, i*slices +slices + (j+1)%slices, i*slices + (j+1)%slices, i*slices + j );
-        }
-    }*/
     file.commit();
 }
 
@@ -241,82 +211,16 @@ void App::makeGlass(int slices){
     heights.append(1.4);
     TextOutput file("../data-files/model/glass.off");
     file.writeSymbol(makeTube(radii, heights, slices));
-    //file.printf("**********************\n");
-    /*file.printf(STR(OFF\n%d %d 1\n), heights.size()*slices, (heights.size()-1)*slices);
-     for (int i = 0; i < heights.size(); ++i){
-        for(int j = 0; j < slices; ++j){
-            file.printf(STR(%f %f %f\n), radii[i]*(-sin(((2*pif()*j)/slices))), heights[i], radii[i]*(cos((2*pif()*j)/slices)));
-        }
-    }
-    for (int i = 0; i < heights.size()-1; ++i){
-        for(int j = 0; j < slices; ++j){
-            //file.printf(STR(4 %d %d %d %d\n), i*slices + j, i*slices + (j+1)%slices, i*slices +slices + (j+1)%slices, i*slices +slices + j);
-            file.printf(STR(4 %d %d %d %d\n), i*slices +slices + j, i*slices +slices + (j+1)%slices, i*slices + (j+1)%slices, i*slices + j );
-        }
-    }*/
+ 
     file.commit();
 }
-/*
-void App::generateGlass(int slices, int numRings){
-    float topRadius = 4;
-    float bottomRadius = 1;
-    float radius = bottomRadius;
-    float rIncrement = (topRadius-bottomRadius)/(numRings-1);
-    float height = .5;
-    float hIncrement = .5;
-    TextOutput file("../data-files/model/glass.off");
-    file.printf(STR(OFF\n%d %d 1\n), numRings*slices + (numRings-2)*slices, (numRings-1)*slices + (numRings-3)*slices + slices);
-    for (int i = 0; i < numRings; ++i){
-        for(int j = 0; j < slices; ++j){
-            file.printf(STR(%f %f %f\n), radius*(-sin(((2*pif()*j)/slices))), radius*height, radius*(cos((2*pif()*j)/slices)));
-        }
-        radius +=rIncrement;
-        height += hIncrement;
-    }
-    
-    bottomRadius = .6*bottomRadius;
-    radius = bottomRadius;
-    rIncrement = (topRadius-bottomRadius)/(numRings-1);
-    height = .5 + hIncrement;
-    
-    for (int i = 0; i < numRings-2; ++i){
-        for(int j = 0; j < slices; ++j){
-            file.printf(STR(%f %f %f\n), radius*(-sin(((2*pif()*j)/slices))), radius*height, radius*(cos((2*pif()*j)/slices)));
-        }
-        radius +=rIncrement;
-        height += hIncrement;
-    }
 
-    for (int i = 0; i <numRings-1; ++i){
-        for(int j = 0; j < slices; ++j){
-            //file.printf(STR(4 %d %d %d %d\n), i*slices +j, i*slices+(j+1)%slices, i*slices+(j+1)%slices + slices, i*slices+j+slices);
-            file.printf(STR(4 %d %d %d %d\n), i*slices+j+slices, i*slices+(j+1)%slices + slices, i*slices+(j+1)%slices, i*slices +j);
-        }
-    }
-    //file.printf("********************\n");
-    for (int i = numRings; i < (numRings-1+(numRings-2)); ++i){
-        for(int j = 0; j < slices; ++j){
-            file.printf(STR(4 %d %d %d %d\n), i*slices +j, i*slices+(j+1)%slices, i*slices+(j+1)%slices + slices, i*slices+j+slices);
-        }
-    }
-    //file.printf("*************\n");
-    for(int i = 0; i < slices; ++i){
-        //file.printf(STR(4 %d %d %d %d\n), numRings*(slices-1) + i, numRings*(slices-1) + (i+1)%slices, numRings*slices + (numRings-3)*slices +(i+1)%slices, numRings*slices + (numRings-3)*slices +i);
-        file.printf(STR(4 %d %d %d %d\n), numRings*slices + (numRings-3)*slices +i, numRings*slices + (numRings-3)*slices +(i+1)%slices, numRings*(slices-1) + (i+1)%slices, numRings*(slices-1) + i);
-    }
-    
-    file.commit();
-}
-*/
 
 // Called before the application loop begins.  Load data here and
 // not in the constructor so that common exceptions will be
 // automatically caught.
 void App::onInit() {
     GApp::onInit();
-    makeCylinder(1, 2, 10);
-    //generateGlass(6, 4);
-    makeGlass(10);
     makeFountainPiece();
     makeSplash();
     makeTree();
@@ -347,6 +251,7 @@ void App::makeGUI() {
     debugWindow->setVisible(true);
     developerWindow->videoRecordDialog->setEnabled(true);
 
+    /*Begin commenting out to remove pane here*/
     GuiPane* glassPane = debugPane->addPane("Chalice");
     glassPane->setNewChildSize(240);
     glassPane->addNumberBox("Slices", &m_slices,"m", GuiTheme::NO_SLIDER, 0, 100)->setUnitsSize(1);
@@ -402,13 +307,6 @@ void App::makeGUI() {
                 }
             }
 
-            /*for (int j = 0; j < (image->width()*(image->height()-1)); ++j){
-                if ((j+1)%image->width() != 0){
-                    //file.printf("4 %d %d %d %d\n", j, j+1, j+image->width()+1, j+image->width());
-                    file.printf("4 %d %d %d %d\n", j+image->width(), j+image->width()+1, j+1, j);
-                }
-            }*/
-            //file.printf("%d %d\n", image->height(), image->width());
             for (int i = 0; i < image->width()-1; ++i){
                 for (int j = 0; j < image->height()-1; ++j){
                     file.printf("4 %d %d %d %d\n", j + i*image->height(), j + (i+1)*image->height(), j+1 + (i+1)*image->height(), j+1 + i*image->height());
@@ -432,6 +330,8 @@ void App::makeGUI() {
     infoPane->addLabel("in App::onInit().");
     infoPane->addButton("Exit", [this]() { m_endProgram = true; });
     infoPane->pack();
+
+    /*End commenting to remove pane here*/
 
     // More examples of debugging GUI controls:
     // debugPane->addCheckBox("Use explicit checking", &explicitCheck);
