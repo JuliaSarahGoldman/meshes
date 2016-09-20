@@ -1,10 +1,10 @@
-**Julia Goldman**
 **Lab 1: Meshes**
+**Julia Goldman**
 
 Algorithms
 ================================
 This program need algorithms for two important purposes: generating points,
-and generating faces. When generating points in a circle, as long as one knows the number of points one wants and the radius one wants the points to appear at (and the height), one can simply use the equation (plug in equation). For a heightfield, on the other hand, one wants a field of points, one for each pixel. To do this, one can take the color value at each pixel, average the red, green, and blue values to get a single number, and us ethis (multiplied by a constant) for the height. The pixel's coordinates become the x,y coordinates (again, multiplied by a constant). 
+and generating faces. When generating points in a circle, as long as one knows the number of points one wants and the radius one wants the points to appear at (and the height), one can simply use the equation $$P_i = r \cdot \left(-\sin \theta_i, y, \cos \theta_i \right),$$ where $$\theta_i = \frac{2 \pi i}{n}.$$ For a heightfield, on the other hand, one wants a field of points, one for each pixel. To do this, one can take the color value at each pixel, average the red, green, and blue values to get a single number, and us ethis (multiplied by a constant) for the height. The pixel's coordinates become the x,y coordinates (again, multiplied by a constant). 
 
 Then, one needs to connect the points. For the cylinder or the glass, one is connecting vertices arranged in circluar layers, or rings. One can choose a ring to start at, and a vertex in that ring, and connect that vertex to a vertex next to it and the two directly above (or below) it and its neighbor (in counterclockwise order). One does this for every vertex in the ring, and then moves on to the next ring, until every vertex is connected.
 
@@ -35,9 +35,9 @@ For my scene, I created a fountain. A fountain is essentially a series of wide c
 
 Questions
 ================================
-1.
+1. One can use the concept of a virtual image to fake reflections of the mountains. That is, when one actually looks into a reflective surface, objects appear to be ateh same distance from the surface in the reflection as they are from the surface in real life. As such, one can place a copy of the object behind the "reflective" surface at an equal distance behind the surface as thr actual object is in front of it , and the eye will be tricked.
 2. Triangle meshes are preferred because of the special properties of triangles. A triangle is a simplex, meaning that any polygon can be tesselated into triangles, so anything that can be modeled with polygons can be modeled just as accuarately with triangles. Also, triangles are always planar and convex, which makes it easier to model their behavior.
-3.
+3. A more efficient tesselation would use fewer triangles in flat areas, and more triangles in hilly ones. One way to do this is greedy insertion algorithm, which first uses a triangulation with few triangles and a lot of error, and then refines the mesh by finding the spots with most error and inserting more vertices, until the mesh is as refined as one wants to be.
 
 Reflections
 ================================
